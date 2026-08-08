@@ -39,12 +39,17 @@ export abstract class StoryScene extends Phaser.Scene {
   protected setupWorld(px: number, py: number): void {
     this.ui = this.scene.get('Ui') as UiScene;
     this.scene.bringToTop('Ui');
-    // checkpoint: a refresh resumes at this scene, not at Monday morning
-    try {
-      const phase = (this as unknown as { phase?: number }).phase;
-      localStorage.setItem('eif-checkpoint', JSON.stringify({ scene: this.scene.key, phase }));
-    } catch {
-      // storage unavailable (private mode) — the game still runs
+    // checkpoint: a refresh resumes at this scene, not at Monday morning.
+    // Scenes reached via ?scene= dev-jumps never overwrite the real save.
+    if (this.registry.get('devJump')) {
+      this.registry.set('devJump', false);
+    } else {
+      try {
+        const phase = (this as unknown as { phase?: number }).phase;
+        localStorage.setItem('eif-checkpoint', JSON.stringify({ scene: this.scene.key, phase }));
+      } catch {
+        // storage unavailable (private mode) — the game still runs
+      }
     }
     audio.setLayer(null); // scenes opt in to extra mood layers explicitly
     this.runner = new ScriptRunner({ state: gameState, notebook: this.ui.notebook, ui: this.ui.port });

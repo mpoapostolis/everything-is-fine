@@ -54,8 +54,14 @@ export class BootScene extends Phaser.Scene {
     } catch { /* storage unavailable */ }
     const hasCheckpoint = !!checkpoint && checkpoint.scene !== 'Prologue';
 
+    const placeNames: Record<string, string> = {
+      Checkup: 'the check-up', Waters: 'home', Delivery: 'the delivery room',
+      Corridor: 'the corridor', Nicu: 'the NICU', HomeCall: 'home, alone',
+      Signature: 'the consent form', Ward: 'the ward', Finale: 'the homecoming',
+    };
+    const where = hasCheckpoint && checkpoint ? placeNames[checkpoint.scene] : undefined;
     const begin = this.add.text(cx, cy + 90,
-      hasCheckpoint ? '— press any key to continue —' : '— press any key to begin —', {
+      where ? `— press any key to continue: ${where} —` : '— press any key to begin —', {
         fontFamily: 'GameFont, monospace', fontSize: '24px', color: '#c8d0dc',
       }).setOrigin(0.5);
     this.tweens.add({ targets: begin, alpha: 0.25, duration: 900, yoyo: true, repeat: -1 });
@@ -83,7 +89,10 @@ export class BootScene extends Phaser.Scene {
         data[k] = /^\d+$/.test(v) ? Number(v) : v;
       });
       let target = params.get('scene') ?? 'Prologue';
-      if (!params.get('scene') && !fresh && hasCheckpoint && checkpoint) {
+      if (params.get('scene')) {
+        // dev/debug jump — it must NOT overwrite the real checkpoint
+        this.registry.set('devJump', true);
+      } else if (!fresh && hasCheckpoint && checkpoint) {
         target = checkpoint.scene;
         if (checkpoint.phase !== undefined) data.phase = checkpoint.phase;
       }
