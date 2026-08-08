@@ -137,10 +137,16 @@ export class PrologueScene extends StoryScene {
         this.setWaypoint(100, 64); // the keys on the hook
       },
     });
+    let tookKeys = false;
     this.interactions.add({
-      x: 80, y: 40, w: 44, h: 44, verb: 'Take the keys', promptY: 80, once: true,
-      enabled: () => gameState.has('bag-ready'),
+      x: 80, y: 40, w: 44, h: 44, verb: 'Take the keys', promptY: 80,
       onUse: async () => {
+        if (tookKeys) return;
+        if (!gameState.has('bag-ready')) {
+          await this.play([{ say: { text: S.keysNotYet } }]);
+          return;
+        }
+        tookKeys = true;
         this.setWaypoint(null);
         audio.sfx('sfx/switch', { volume: 0.35 });
         await this.play([{ say: { text: S.keys } }, { flag: 'keys-taken' }]);

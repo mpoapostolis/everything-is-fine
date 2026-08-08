@@ -16,14 +16,15 @@ import { UiScene } from './scenes/UiScene';
 import { WardScene } from './scenes/WardScene';
 import { WatersScene } from './scenes/WatersScene';
 
-// the pixel font must exist before any text renders
-try {
-  await document.fonts.load('20px GameFont');
-} catch {
-  // font failed to load — the monospace fallback takes over
-}
+async function startGame(): Promise<void> {
+  // the pixel font must exist before any text renders
+  try {
+    await document.fonts.load('20px GameFont');
+  } catch {
+    // font failed to load — the monospace fallback takes over
+  }
 
-const game = new Phaser.Game({
+  const game = new Phaser.Game({
   type: Phaser.AUTO,
   parent: 'game',
   width: GameConfig.WIDTH,
@@ -56,7 +57,10 @@ const game = new Phaser.Game({
     SliceEndScene,
     DebugScene,
   ],
-});
+  });
 
-// dev handle for playtesting tools; harmless in production builds
-(window as unknown as { __game: Phaser.Game }).__game = game;
+  // dev handle for playtesting tools; harmless in production builds
+  (window as unknown as { __game: Phaser.Game }).__game = game;
+}
+
+void startGame();

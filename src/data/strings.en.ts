@@ -30,6 +30,7 @@ export const EN = {
     wifeTalk4: "What if I'm not good at this? …Don't answer with a joke. …Okay, one joke.",
     wifeTalk5: 'Last quiet morning. Maybe.',
     keys: 'You take the keys from the hook by the door.',
+    keysNotYet: "Not yet. The crib, the bag — you promised. There's time. There's still time.",
   },
   checkup: {
     thoughts: [
@@ -44,6 +45,7 @@ export const EN = {
     wifeTold: 'See? Told you there was nothing to worry about.',
     obNote: '"Everything\'s fine. Come back tomorrow."',
     objHome: 'Go home.',
+    exitNotYet: "Not yet — the check-up first. She's already up on the table.",
     receptionist: 'Third floor is busy today. All good news, mostly.',
   },
   waters: {
@@ -59,6 +61,7 @@ export const EN = {
     youComing: "We're on our way.",
     objBack: 'Go back to the hospital.',
     keys: 'Bag. Keys. Go.',
+    keysNotYet: 'Her first. Go to her.',
   },
   delivery: {
     thoughts: [
@@ -191,6 +194,7 @@ export const EN = {
     noteCall: '"Everything\'s fine. But come now."',
     objTurnAround: 'TURN AROUND.',
     keys: 'Keys. Go. Now.',
+    keysNotYet: 'The phone is ringing. Answer it first.',
   },
   signature: {
     thoughts: [

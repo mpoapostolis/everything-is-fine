@@ -93,10 +93,19 @@ export class HomeCallScene extends StoryScene {
       },
     });
 
+    let leftForHospital = false;
     this.interactions.add({
-      x: 80, y: 40, w: 44, h: 44, verb: S.keys, promptY: 80, once: true,
-      enabled: () => this.callAnswered,
+      x: 80, y: 40, w: 44, h: 44, verb: S.keys, promptY: 80,
       onUse: async () => {
+        if (leftForHospital) return;
+        if (!this.callAnswered) {
+          if (this.phoneRinging) {
+            await this.play([{ say: { text: S.keysNotYet } }]);
+            this.setWaypoint(268, 240);
+          }
+          return;
+        }
+        leftForHospital = true;
         this.setWaypoint(null);
         audio.sfx('sfx/door-slam', { volume: 0.5 });
         await this.goTo('Signature');

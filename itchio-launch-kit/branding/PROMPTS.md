@@ -1,0 +1,12 @@
+# Store Artwork Prompts
+
+The source images were created with the built-in OpenAI ImageGen tool. The final cover, banner, and embed background were cropped, composed, and lettered locally with the game's VT323 font.
+
+## Cover key art
+
+Use case: stylized-concept. Asset type: itch.io game cover key art, designed for a 5:4 crop. Create evocative pixel-art key art for a serious narrative game about a father waiting outside a closed hospital delivery-room door while his wife is in danger. Show an unnaturally long, empty hospital corridor at night with pale blue-gray tiles, cold fluorescent lights, a closed wooden double door, a clock, and empty chairs. The subject is a small dark-haired father in a charcoal hoodie, viewed from a slightly elevated top-down angle, facing the door. Use polished, authentic 16-bit pixel art with crisp edges, deliberate clusters, subtle tile detail, and no smooth vector gradients. Compose for a 5:4 landscape-safe crop: character lower center-left, strong corridor perspective, and dark negative space in the upper area for title placement. Palette: near-black `#0a0c10`, charcoal `#131823`, hospital blue-gray `#6f8396`, muted teal `#50736f`, tired fluorescent cream `#c7c2a8`, and one restrained warm amber line beneath the door. Mood: quiet dread, waiting, isolation, bureaucratic uncertainty, human rather than supernatural. No text, typography, logos, watermark, blood, gore, baby, monster, weapons, or medical procedure.
+
+## Page banner key art
+
+Use case: stylized-concept. Asset type: itch.io page header banner, designed for a 960 × 300 crop. Create a very wide cinematic pixel-art hospital corridor at night. Place a small dark-haired father in a charcoal hoodie in the right half of the image, facing a distant closed wooden delivery-room door. Leave the left half mostly dark and uncluttered as intentional negative space for a title added later. Use cold fluorescent lighting, pale blue-gray floor tiles, empty waiting chairs, a wall clock, and a thin restrained amber light under the distant door. Authentic polished 16-bit pixel art, crisp pixel clusters, slightly elevated top-down perspective, subtle dramatic vignette, serious human realism, quiet dread and isolation. Palette: near-black, charcoal, hospital blue-gray, muted teal, tired fluorescent cream, tiny warm amber accent. No text, letters, logos, watermark, blood, gore, baby, monster, weapons, or visible medical procedure.
+

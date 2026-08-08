@@ -77,10 +77,17 @@ export class WatersScene extends StoryScene {
       },
     });
 
+    let grabbedKeys = false;
     this.interactions.add({
-      x: 80, y: 40, w: 60, h: 60, verb: 'Bag. Keys. Go.', promptY: 84, once: true,
-      enabled: () => gameState.has('waters-broke'),
+      x: 80, y: 40, w: 60, h: 60, verb: 'Bag. Keys. Go.', promptY: 84,
       onUse: async () => {
+        if (grabbedKeys) return;
+        if (!gameState.has('waters-broke')) {
+          await this.play([{ say: { text: S.keysNotYet } }]);
+          this.setWaypoint(420, 200);
+          return;
+        }
+        grabbedKeys = true;
         this.setWaypoint(null);
         await this.play([{ say: { text: S.keys } }]);
         await this.goTo('Delivery');

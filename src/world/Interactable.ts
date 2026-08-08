@@ -74,7 +74,7 @@ export class InteractionSystem {
       return;
     }
     // exits (auto) always win over anything standing next to them
-    const autoHit = this.items.find((i) => i.active && i.cfg.auto && i.nearCentre(feet, 40));
+    const autoHit = this.items.find((i) => i.active && i.cfg.auto && i.nearCentre(feet, 52));
     const hit =
       autoHit ??
       this.items.find((i) => i.active && (i.contains(probe) || i.contains(feet))) ??
@@ -93,8 +93,8 @@ export class InteractionSystem {
         });
       }
     };
-    // exit doors: walking into them is enough
-    if (hit.cfg.auto && hit.nearCentre(feet, 34)) {
+    // exit doors: walking NEAR them is enough
+    if (hit.cfg.auto && hit.nearCentre(feet, 52)) {
       this.prompt.hide();
       fire();
       return;

@@ -80,10 +80,21 @@ export class CheckupScene extends StoryScene {
       },
     });
 
+    // the door ALWAYS answers — silence is how players get stranded
+    let nagUntil = 0;
+    let leftForHome = false;
     this.interactions.add({
-      x: 16, y: 66, w: 80, h: 56, verb: 'Go home', promptY: 104, once: true, auto: true,
-      enabled: () => gameState.has('checkup-done'),
+      x: 16, y: 66, w: 80, h: 56, verb: 'Go home', promptY: 104, auto: true,
       onUse: async () => {
+        if (leftForHome) return;
+        if (!gameState.has('checkup-done')) {
+          if (this.time.now < nagUntil) return;
+          nagUntil = this.time.now + 5000;
+          await this.play([{ say: { text: S.exitNotYet } }]);
+          this.setWaypoint(545, 215); // the exam corner — she's waiting
+          return;
+        }
+        leftForHome = true;
         this.setWaypoint(null);
         await this.goTo('Waters');
       },
