@@ -6,6 +6,7 @@ import { CorridorScene } from './scenes/CorridorScene';
 import { DebugScene } from './scenes/DebugScene';
 import { DeliveryScene } from './scenes/DeliveryScene';
 import { EndScene } from './scenes/EndScene';
+import { FinaleScene } from './scenes/FinaleScene';
 import { HomeCallScene } from './scenes/HomeCallScene';
 import { NicuScene } from './scenes/NicuScene';
 import { PrologueScene } from './scenes/PrologueScene';
@@ -51,6 +52,7 @@ const game = new Phaser.Game({
     SignatureScene,
     WardScene,
     EndScene,
+    FinaleScene,
     SliceEndScene,
     DebugScene,
   ],

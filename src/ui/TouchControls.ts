@@ -29,6 +29,9 @@ export class TouchControls {
       () => [scene.scale.width - 84, scene.scale.height - 96]);
     this.makeButton('N', 26, () => this.key('n', 'KeyN', 78, true), () => this.key('n', 'KeyN', 78, false),
       () => [scene.scale.width - 178, scene.scale.height - 72]);
+    // the phone: without this, mobile players could never call her
+    this.makeButton('C', 26, () => this.key('c', 'KeyC', 67, true), () => this.key('c', 'KeyC', 67, false),
+      () => [scene.scale.width - 244, scene.scale.height - 60]);
 
     // floating joystick on the left half
     scene.input.on('pointerdown', (p: Phaser.Input.Pointer) => {

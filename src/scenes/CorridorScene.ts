@@ -203,13 +203,24 @@ export class CorridorScene extends StoryScene {
   }
 
   private async feverDose(): Promise<void> {
-    await this.doctorComes([
+    this.allowUnlock = false;
+    this.player.lock();
+    const p = this.player.sprite;
+    const doctor = this.room.person(p.x + 44, p.y + 2, 'doctor/idle-left');
+    await this.playFree([
       { say: { speaker: 'Doctor', text: S.doseFever1 } },
+      { say: { text: S.feverRush } }, // this one is in a hurry
+    ]);
+    // rule five: the game's only choice. Both answers change nothing.
+    await this.ui.choice([S.choiceOkay, S.choiceWhatOkay]);
+    await this.playFree([
       { say: { speaker: 'Doctor', text: S.doseFever2 } },
       { say: { speaker: 'You', text: S.youSeeHer } },
       { say: { speaker: 'Doctor', text: S.docNotYet } },
       { note: { time: '10:45', text: S.noteFever } },
     ]);
+    doctor.destroy();
+    this.allowUnlock = true;
     await this.ui.timeCard('11:35', 1400, true); // stay black into the rebuild
     this.scene.restart({ phase: 1 });
   }
@@ -217,6 +228,7 @@ export class CorridorScene extends StoryScene {
   private async oxygenDose(): Promise<void> {
     await this.doctorComes([
       { say: { speaker: 'Doctor', text: S.doseOxygen } },
+      { say: { text: S.oxygenAwkward } }, // this one can't hold your eye
       { say: { speaker: 'You', text: S.youSerious } },
       { say: { speaker: 'Doctor', text: S.docPrecaution } },
       { note: { time: '11:50', text: S.noteOxygen } },
@@ -237,6 +249,7 @@ export class CorridorScene extends StoryScene {
       { say: { speaker: 'Doctor', text: S.doseBlood2 } },
       { say: { speaker: 'You', text: S.youNotLeaving } },
       { say: { speaker: 'Doctor', text: S.docGo } },
+      { say: { text: S.docGoKind } }, // this one means it. That's the worst part.
       { note: { time: '12:45', text: S.noteBlood } },
       { objective: S.objGoHome },
     ]);

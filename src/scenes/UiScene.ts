@@ -102,11 +102,62 @@ export class UiScene extends Phaser.Scene {
   private innerActive = false;
   private voiceGen = 0;
   private voiceTexts: Phaser.GameObjects.Text[] = [];
+  private choiceActive = false;
 
   /** True while any modal UI is up — movement and interactions pause. */
   get busy(): boolean {
     if (!this.dialogue) return false; // queried before create() — nothing is up
-    return this.dialogue.open || !!this.notebookPanel || !!this.helpPanel || this.innerActive;
+    return this.dialogue.open || !!this.notebookPanel || !!this.helpPanel
+      || this.innerActive || this.choiceActive;
+  }
+
+  /** A choice between answers. Whether it changes anything is the scene's
+   *  business — rule five says exactly one of these exists, and it doesn't. */
+  choice(options: string[]): Promise<number> {
+    this.choiceActive = true;
+    return new Promise((resolve) => {
+      const w = Math.min(this.scale.width - 64, 620);
+      const x = (this.scale.width - w) / 2;
+      const y = this.scale.height - 200;
+      const bg = this.add.rectangle(x, y, w, options.length * 40 + 24, 0x0d1016, 0.95)
+        .setOrigin(0).setStrokeStyle(1, 0x39445a).setDepth(1100);
+      const accent = this.add.rectangle(x, y, 3, options.length * 40 + 24, 0xe4c878, 0.95)
+        .setOrigin(0).setDepth(1101);
+      let idx = 0;
+      const texts = options.map((opt, i) =>
+        this.add.text(x + 26, y + 16 + i * 40, opt, {
+          fontFamily: 'GameFont, monospace', fontSize: '22px', color: '#8fa3bf',
+        }).setDepth(1101).setInteractive(),
+      );
+      const render = () => {
+        texts.forEach((t, i) => {
+          t.setColor(i === idx ? '#f0d284' : '#8fa3bf');
+          t.setText((i === idx ? '▸ ' : '  ') + options[i]);
+        });
+      };
+      render();
+      const kb = this.input.keyboard!;
+      const move = (d: number) => { idx = (idx + d + options.length) % options.length; render(); };
+      const onUp = () => move(-1);
+      const onDown = () => move(1);
+      const finish = (picked: number) => {
+        kb.off('keydown-UP', onUp); kb.off('keydown-W', onUp);
+        kb.off('keydown-DOWN', onDown); kb.off('keydown-S', onDown);
+        kb.off('keydown-E', onPick); kb.off('keydown-SPACE', onPick);
+        bg.destroy(); accent.destroy(); texts.forEach((t) => t.destroy());
+        this.choiceActive = false;
+        resolve(picked);
+      };
+      const onPick = () => finish(idx);
+      kb.on('keydown-UP', onUp); kb.on('keydown-W', onUp);
+      kb.on('keydown-DOWN', onDown); kb.on('keydown-S', onDown);
+      // small delay so the E that closed the previous line can't instapick
+      this.time.delayedCall(250, () => {
+        kb.on('keydown-E', onPick);
+        kb.on('keydown-SPACE', onPick);
+        texts.forEach((t, i) => t.on('pointerdown', () => finish(i)));
+      });
+    });
   }
 
   /** His voice, over black, between the scenes. One line at a time;

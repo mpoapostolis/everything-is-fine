@@ -46,17 +46,35 @@ export class BootScene extends Phaser.Scene {
     const cx = this.scale.width / 2;
     const cy = this.scale.height / 2;
 
-    const begin = this.add.text(cx, cy + 90, '— press any key to begin —', {
-      fontFamily: 'GameFont, monospace', fontSize: '24px', color: '#c8d0dc',
-    }).setOrigin(0.5);
+    // checkpoint: offer to continue where they left off
+    let checkpoint: { scene: string; phase?: number } | null = null;
+    try {
+      const raw = localStorage.getItem('eif-checkpoint');
+      if (raw) checkpoint = JSON.parse(raw);
+    } catch { /* storage unavailable */ }
+    const hasCheckpoint = !!checkpoint && checkpoint.scene !== 'Prologue';
+
+    const begin = this.add.text(cx, cy + 90,
+      hasCheckpoint ? '— press any key to continue —' : '— press any key to begin —', {
+        fontFamily: 'GameFont, monospace', fontSize: '24px', color: '#c8d0dc',
+      }).setOrigin(0.5);
     this.tweens.add({ targets: begin, alpha: 0.25, duration: 900, yoyo: true, repeat: -1 });
+    if (hasCheckpoint) {
+      this.add.text(cx, cy + 126, 'R — start over from the beginning', {
+        fontFamily: 'GameFont, monospace', fontSize: '17px', color: '#5a6478',
+      }).setOrigin(0.5);
+    }
+    this.add.text(cx, cy + 160,
+      'This game depicts childbirth complications and infant intensive care.', {
+        fontFamily: 'GameFont, monospace', fontSize: '15px', color: '#4a5468',
+      }).setOrigin(0.5);
 
     this.add.text(cx, this.scale.height - 28,
       'arrows / WASD — walk      E — interact      N — notebook      H — help      F — fullscreen', {
         fontFamily: 'GameFont, monospace', fontSize: '17px', color: '#5a6478',
       }).setOrigin(0.5);
 
-    const start = () => {
+    const start = (fresh: boolean) => {
       const params = new URLSearchParams(window.location.search);
       // every query param becomes scene data (numbers arrive as numbers),
       // so ?scene=Corridor&phase=2 resumes exactly there
@@ -64,10 +82,18 @@ export class BootScene extends Phaser.Scene {
       params.forEach((v, k) => {
         data[k] = /^\d+$/.test(v) ? Number(v) : v;
       });
+      let target = params.get('scene') ?? 'Prologue';
+      if (!params.get('scene') && !fresh && hasCheckpoint && checkpoint) {
+        target = checkpoint.scene;
+        if (checkpoint.phase !== undefined) data.phase = checkpoint.phase;
+      }
+      if (fresh) {
+        try { localStorage.removeItem('eif-checkpoint'); } catch { /* ok */ }
+      }
       this.scene.launch('Ui');
-      this.scene.start(params.get('scene') ?? 'Prologue', data);
+      this.scene.start(target, data);
     };
-    this.input.keyboard!.once('keydown', start);
-    this.input.once('pointerdown', start);
+    this.input.keyboard!.once('keydown', (ev: KeyboardEvent) => start(ev.key === 'r' || ev.key === 'R'));
+    this.input.once('pointerdown', () => start(false));
   }
 }

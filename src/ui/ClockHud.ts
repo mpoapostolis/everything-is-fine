@@ -49,7 +49,11 @@ export class ClockHud {
       this.day = parts[0].toUpperCase();
     }
     const time = parts[parts.length - 1];
-    this.dayText.setText(this.day ? { MON: 'MONDAY', TUE: 'TUESDAY' }[this.day] ?? this.day : '');
+    this.dayText.setText(
+      this.day
+        ? { MON: 'MONDAY', TUE: 'TUESDAY', SAT: 'SATURDAY', SUN: 'SUNDAY' }[this.day] ?? this.day
+        : '',
+    );
     this.timeText.setText(time);
     const w = Math.max(this.timeText.width + 30, this.dayText.width + 34, 120);
     this.bg.setSize(w, 58);

@@ -44,6 +44,7 @@ export class SignatureScene extends StoryScene {
       await this.playFree([
         { clock: 'TUE 14:20' },
         { say: { speaker: 'Doctor', text: S.doc1 } }, // no "little" this time. Notice.
+        { say: { speaker: 'Doctor', text: S.docWhyYou } },
         { say: { speaker: 'Doctor', text: S.doc2 } },
         { objective: S.objSign },
       ]);

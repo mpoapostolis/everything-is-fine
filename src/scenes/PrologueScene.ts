@@ -82,7 +82,9 @@ export class PrologueScene extends StoryScene {
     this.interactions.add({
       x: 296, y: 172, w: 50, h: 46, verb: 'Talk to her', once: false,
       onUse: async () => {
-        const line = this.wifeLine++ % 2 === 0 ? S.wifeTalk1 : S.wifeTalk2;
+        // she is a person, not a stake: jokes, plans, one real fear
+        const talks = [S.wifeTalk1, S.wifeTalk2, S.wifeTalk3, S.wifeTalk4, S.wifeTalk5];
+        const line = talks[this.wifeLine++ % talks.length];
         await this.play([{ say: { speaker: 'Wife', text: line } }]);
       },
     });
