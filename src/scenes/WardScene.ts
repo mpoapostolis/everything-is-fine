@@ -36,7 +36,7 @@ export class WardScene extends StoryScene {
     this.room.prop(220, 140, 'prop/iv-stand');
 
     void (async () => {
-      await this.playFree([{ clock: 'TUE 16:40' }, { objective: S.objGoToHer }]);
+      await this.playFree([{ clock: 'TUE 18:00' }, { objective: S.objGoToHer }]);
       // wait for the entry thoughts to finish before she speaks
       while (this.ui.busy) {
         await new Promise((r) => this.time.delayedCall(200, r));
@@ -50,6 +50,18 @@ export class WardScene extends StoryScene {
       onUse: async () => {
         this.setWaypoint(null);
         await this.play([
+          // the fear first: is she awake? is she—
+          { say: { text: S.sheTurned } },
+          { say: { speaker: 'You', text: S.youHey } },
+          { say: { text: S.nothingBeat } },
+          { wait: 1200 },
+          { say: { speaker: 'Wife', text: S.wifeDots } },
+          { say: { speaker: 'Wife', text: S.wifeHey } },
+          { say: { speaker: 'You', text: S.youOkayQ } },
+          { say: { text: S.sheWaits } },
+          { wait: 1400 },
+          { say: { speaker: 'Wife', text: S.wifeDontRemember } },
+          { say: { speaker: 'You', text: S.youYoureHere } },
           { say: { text: S.firstTouch } },
           { say: { speaker: 'Wife', text: S.wifeAsk } },
           { say: { speaker: 'You', text: S.youTell } },
@@ -57,7 +69,8 @@ export class WardScene extends StoryScene {
           { say: { text: S.emptyBassinet } },
           { objective: S.objSleep },
         ]);
-        this.time.delayedCall(2_600, () => void this.goTo('End', 1200));
+        // no hard cut: you stay with her a while, and the world leaves slowly
+        this.time.delayedCall(5_200, () => void this.goTo('End', 2200));
       },
     });
   }

@@ -1,3 +1,4 @@
+import Phaser from 'phaser';
 import { EN } from '../data/strings.en';
 import { audio } from '../engine/audio';
 import { corridorSegments } from '../engine/geometry';
@@ -12,9 +13,23 @@ const SEG_W = 160;
  *  see the baby in the incubator. */
 export class CorridorScene extends StoryScene {
   private phase = 0; // 0: fever pending · 1: oxygen+NICU · 2: blood → go home
+  private exitX = 0; // >0 once the doctor says "go home" — walking onto the
+  // glass doors leaves, checked here directly, independent of prompts
 
   constructor() {
     super('Corridor');
+  }
+
+  update(time: number, delta: number): void {
+    super.update(time, delta);
+    if (this.exitX > 0 && !this.ui.busy && !this.leaving) {
+      const p = this.player.sprite;
+      if (Phaser.Math.Distance.Between(p.x, p.y, this.exitX, 92) < 58) {
+        this.exitX = 0;
+        this.setWaypoint(null);
+        void this.goTo('HomeCall');
+      }
+    }
   }
 
   init(data: { phase?: number }): void {
@@ -106,6 +121,7 @@ export class CorridorScene extends StoryScene {
     for (let i = 0; i < segments; i++) {
       const x = 420 + i * SEG_W;
       if (x > width - 80) break;
+      if (this.phase >= 2 && x > width - 220) continue; // keep the exit corner clean
       const isWrongDoor = this.phase >= 2 && i === 1; // mid-corridor, far from the exit
       this.room.door(x, 62, isWrongDoor ? 'door/teal' : 'door/wood', { solid: true });
       if (isWrongDoor) {
@@ -221,12 +237,6 @@ export class CorridorScene extends StoryScene {
       { objective: S.objGoHome },
     ]);
     this.setWaypoint(width - 60, 82);
-    this.interactions.add({
-      x: width - 100, y: 66, w: 80, h: 56, verb: S.leave, once: true, promptY: 104, auto: true,
-      onUse: async () => {
-        this.setWaypoint(null);
-        await this.goTo('HomeCall');
-      },
-    });
+    this.exitX = width - 60; // the scene itself watches the doors from now on
   }
 }

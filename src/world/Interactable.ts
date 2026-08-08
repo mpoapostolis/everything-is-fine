@@ -73,7 +73,10 @@ export class InteractionSystem {
       this.prompt.hide();
       return;
     }
+    // exits (auto) always win over anything standing next to them
+    const autoHit = this.items.find((i) => i.active && i.cfg.auto && i.nearCentre(feet, 40));
     const hit =
+      autoHit ??
       this.items.find((i) => i.active && (i.contains(probe) || i.contains(feet))) ??
       this.items.find((i) => i.active && i.nearCentre(feet, 52));
     if (!hit) {

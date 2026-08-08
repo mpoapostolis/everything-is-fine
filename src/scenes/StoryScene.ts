@@ -78,7 +78,7 @@ export abstract class StoryScene extends Phaser.Scene {
     await this.runner.run(steps);
   }
 
-  private leaving = false;
+  protected leaving = false;
 
   /** Scene entry: black screen → his inner voice, line by line → the world.
    *  The blackout is synchronous — not one frame of the world leaks through. */
@@ -97,11 +97,24 @@ export abstract class StoryScene extends Phaser.Scene {
     this.scene.start(sceneKey, data);
   }
 
+  private stuckMs = 0;
+
   update(time: number, delta: number): void {
     if (this.ui.busy) {
       this.player.lock();
     } else if (this.player.isLocked && this.allowUnlock) {
       this.player.unlock();
+    }
+    // watchdog: whatever went wrong, the player is NEVER stranded frozen
+    if (this.player.isLocked && !this.ui.busy && !this.leaving) {
+      this.stuckMs += delta;
+      if (this.stuckMs > 4000) {
+        this.allowUnlock = true;
+        this.player.unlock();
+        this.stuckMs = 0;
+      }
+    } else {
+      this.stuckMs = 0;
     }
     this.player.update(time, delta);
     this.interactions.update(this.player.facingPoint(), new Phaser.Math.Vector2(this.player.sprite.x, this.player.sprite.y - 4));
