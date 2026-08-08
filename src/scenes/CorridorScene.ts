@@ -22,7 +22,9 @@ export class CorridorScene extends StoryScene {
 
   update(time: number, delta: number): void {
     super.update(time, delta);
-    if (this.exitX > 0 && !this.ui.busy && !this.leaving) {
+    // standing at the glass doors leaves. Open dialogue does not matter —
+    // goTo clears it. Nothing can wedge this shut.
+    if (this.exitX > 0 && !this.leaving) {
       const p = this.player.sprite;
       if (Phaser.Math.Distance.Between(p.x, p.y, this.exitX, 92) < 58) {
         this.exitX = 0;
@@ -152,9 +154,11 @@ export class CorridorScene extends StoryScene {
     void this.playFree([{ objective }, { clock }]);
 
     if (this.phase === 2) {
-      // the way out is real and visible: glass doors under the EXIT sign
+      // the way out is real and visible: glass doors under the EXIT sign —
+      // and it WORKS from second one, whatever dialogue is still open
       this.room.door(width - 60, 62, 'door/glass-double', { solid: true });
       this.room.wallDecal(width - 60, 24, 'sign/exit');
+      this.exitX = width - 60;
     }
     // his voice first — the doses only start counting after it
     void (async () => {
@@ -237,6 +241,5 @@ export class CorridorScene extends StoryScene {
       { objective: S.objGoHome },
     ]);
     this.setWaypoint(width - 60, 82);
-    this.exitX = width - 60; // the scene itself watches the doors from now on
   }
 }

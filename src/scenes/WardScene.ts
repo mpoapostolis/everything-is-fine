@@ -24,6 +24,7 @@ export class WardScene extends StoryScene {
     this.room.wallDecal(70, 40, 'sign/ward-a');
     this.room.wallDecal(240, 38, 'prop/wall-clock');
     this.room.lightPool(150, 170, 150, 70, 0xffe4bc, 0.09);
+    this.room.motes(150, 170, 130, 60, 0xffe4bc, 7);
 
     // other mothers, other babies — each bed has a bassinet WITH a baby
     this.room.prop(320, 140, 'prop/bed-green');

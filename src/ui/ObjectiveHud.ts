@@ -14,10 +14,10 @@ export class ObjectiveHud {
     this.accent = scene.add.rectangle(16, 14, 3, 10, 0xe4c878, 0.95)
       .setOrigin(0).setDepth(999).setAlpha(0);
     this.label = scene.add.text(30, 22, 'OBJECTIVE', {
-      fontFamily: 'monospace', fontSize: '10px', color: '#5a6478',
+      fontFamily: 'GameFont, monospace', fontSize: '14px', color: '#5a6478',
     }).setDepth(1000).setAlpha(0);
     this.text = scene.add.text(30, 36, '', {
-      fontFamily: 'monospace', fontSize: '16px', color: '#e8e6df',
+      fontFamily: 'GameFont, monospace', fontSize: '22px', color: '#e8e6df',
       wordWrap: { width: 440 },
     }).setDepth(1000).setAlpha(0);
   }

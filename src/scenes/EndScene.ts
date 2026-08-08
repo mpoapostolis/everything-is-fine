@@ -27,17 +27,17 @@ export class EndScene extends Phaser.Scene {
       const cx = this.scale.width / 2;
       const cy = this.scale.height / 2;
       const title = this.add.text(cx, cy - 24, S.title, {
-        fontFamily: 'monospace', fontSize: '38px', color: '#e8e6df',
+        fontFamily: 'GameFont, monospace', fontSize: '54px', color: '#e8e6df',
       }).setOrigin(0.5).setAlpha(0).setDepth(2100);
       const sub = this.add.text(cx, cy + 26, S.sub, {
-        fontFamily: 'monospace', fontSize: '14px', color: '#5a6478',
+        fontFamily: 'GameFont, monospace', fontSize: '20px', color: '#5a6478',
       }).setOrigin(0.5).setAlpha(0).setDepth(2100);
       const born = this.add.text(cx, cy + 52, S.born, {
-        fontFamily: 'monospace', fontSize: '13px', color: '#5a6478',
+        fontFamily: 'GameFont, monospace', fontSize: '18px', color: '#5a6478',
       }).setOrigin(0.5).setAlpha(0).setDepth(2100);
       // the last thing anyone reads — his voice, to the baby
       const ded = this.add.text(cx, cy + 110, S.dedication, {
-        fontFamily: 'monospace', fontSize: '15px', fontStyle: 'italic', color: '#9aa6ba',
+        fontFamily: 'GameFont, monospace', fontSize: '21px', fontStyle: 'italic', color: '#9aa6ba',
       }).setOrigin(0.5).setAlpha(0).setDepth(2100);
       await ui.fadeIn(10);
       this.tweens.add({ targets: title, alpha: 1, duration: 2200, delay: 600 });

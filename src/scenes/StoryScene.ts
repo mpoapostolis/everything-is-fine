@@ -61,7 +61,7 @@ export abstract class StoryScene extends Phaser.Scene {
     // (positioned every frame in update() — a y-tween would pin it to the
     // first target's height forever)
     this.wpMark = this.add.text(0, 0, '!', {
-      fontFamily: 'monospace', fontSize: '18px', color: '#f0d284',
+      fontFamily: 'GameFont, monospace', fontSize: '18px', color: '#f0d284',
       stroke: '#211d12', strokeThickness: 4,
     }).setOrigin(0.5, 1).setDepth(951).setVisible(false);
     this.cameras.main.startFollow(this.player.sprite, true, 0.12, 0.12);
@@ -93,6 +93,7 @@ export abstract class StoryScene extends Phaser.Scene {
     this.leaving = true;
     this.allowUnlock = false;
     this.player.lock();
+    this.ui.resetDialogue(); // half-finished conversations die at the door
     await this.ui.fadeOut(fadeMs);
     this.scene.start(sceneKey, data);
   }

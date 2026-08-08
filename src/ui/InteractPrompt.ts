@@ -6,7 +6,7 @@ export class InteractPrompt {
 
   constructor(scene: Phaser.Scene) {
     this.text = scene.add.text(0, 0, '', {
-      fontFamily: 'monospace', fontSize: '10px', color: '#e8e6df',
+      fontFamily: 'GameFont, monospace', fontSize: '13px', color: '#e8e6df',
       backgroundColor: '#10131acc', padding: { x: 5, y: 3 },
     }).setOrigin(0.5, 1).setDepth(900).setVisible(false);
   }

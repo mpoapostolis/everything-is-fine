@@ -138,6 +138,9 @@ export class DeliveryScene extends StoryScene {
   private async caesareanScare(): Promise<void> {
     const doctor = this.add.image(300, 240, 'doctor/idle-down').setOrigin(0.5, 1);
     doctor.setDepth(doctor.y);
+    // the walls lean in for the worst conversation of the night
+    const cam = this.cameras.main;
+    this.tweens.add({ targets: cam, zoom: cam.zoom * 1.09, duration: 14_000, ease: 'sine.inOut' });
     await this.playFree([
       { say: { text: S.csRead } },
       { say: { speaker: 'Doctor', text: S.csHigh } },
@@ -151,6 +154,8 @@ export class DeliveryScene extends StoryScene {
       { say: { speaker: 'Doctor', text: S.csDown } },
     ]);
     doctor.destroy();
+    this.tweens.killTweensOf(cam);
+    this.tweens.add({ targets: cam, zoom: cam.zoom / 1.09, duration: 1800, ease: 'sine.out' }); // breathe out
     await this.ui.timeCard('07:00', 900);
     this.ui.setAmbience(0xa8a49a, 0.3);
     await this.playFree([{ clock: 'TUE 07:00' }]);
@@ -175,6 +180,7 @@ export class DeliveryScene extends StoryScene {
     ];
     crowd.forEach((c) => c.setDepth(c.y + 40));
 
+    this.cameras.main.shake(700, 0.005); // the room becomes weather
     await this.playFree([{ say: { text: S.birthCrowd } }, { wait: 600 }]);
     await this.ui.timeCard('10:02', 1400, true); // three hours of pushing, compressed
     audio.allStop(); // every other sound drops out. exactly as written.

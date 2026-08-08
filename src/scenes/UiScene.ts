@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
 import { audio } from '../engine/audio';
 import { Notebook } from '../engine/Notebook';
+import { TouchControls } from '../ui/TouchControls';
 import type { UiPort } from '../engine/types';
 import { ClockHud } from '../ui/ClockHud';
 import { DialogueBox } from '../ui/DialogueBox';
@@ -21,6 +22,9 @@ export class UiScene extends Phaser.Scene {
   private vignette?: Phaser.GameObjects.Graphics;
   private ambienceParams?: { tint: number; alpha: number };
   private controlsBar!: Phaser.GameObjects.Text;
+  private barTop!: Phaser.GameObjects.Rectangle;
+  private barBottom!: Phaser.GameObjects.Rectangle;
+  private cineOn = false;
 
   constructor() {
     super('Ui');
@@ -33,13 +37,23 @@ export class UiScene extends Phaser.Scene {
     this.clock = new ClockHud(this);
     this.fadeRect = this.add.rectangle(0, 0, 10, 10, 0x000000)
       .setOrigin(0).setDepth(2000).setAlpha(0);
+    // cinematic letterbox — slides in whenever someone is speaking
+    this.barTop = this.add.rectangle(0, 0, 10, 10, 0x05070b)
+      .setOrigin(0, 1).setDepth(950);
+    this.barBottom = this.add.rectangle(0, 0, 10, 10, 0x05070b)
+      .setOrigin(0, 0).setDepth(950);
     this.controlsBar = this.add.text(0, 0,
       'E interact · N notebook · H help · F fullscreen', {
-        fontFamily: 'monospace', fontSize: '11px', color: '#4a5468',
+        fontFamily: 'GameFont, monospace', fontSize: '15px', color: '#4a5468',
       }).setOrigin(0.5, 1).setDepth(900);
 
     this.layout();
     this.scale.on('resize', () => this.layout());
+
+    if (TouchControls.wanted()) {
+      new TouchControls(this); // phones/tablets: joystick + E/N buttons
+      this.controlsBar.setText('drag left side — walk · E — interact · N — notebook');
+    }
 
     this.input.keyboard!.on('keydown-E', () => this.dialogue.advance());
     this.input.keyboard!.on('keydown-SPACE', () => this.dialogue.advance());
@@ -59,38 +73,69 @@ export class UiScene extends Phaser.Scene {
     const h = this.scale.height;
     this.fadeRect.setSize(w, h);
     this.controlsBar.setPosition(w / 2, h - 8);
+    const barH = Math.round(h * 0.085);
+    this.barTop.setSize(w, barH).setPosition(0, this.cineOn ? barH : 0);
+    this.barBottom.setSize(w, barH).setPosition(0, this.cineOn ? h - barH : h);
     if (this.ambienceParams) {
       this.drawAmbience();
     }
   }
 
+  update(): void {
+    const want = !!this.dialogue?.open;
+    if (want !== this.cineOn) {
+      this.cineOn = want;
+      const h = this.scale.height;
+      const barH = Math.round(h * 0.085);
+      this.tweens.killTweensOf([this.barTop, this.barBottom]);
+      this.tweens.add({
+        targets: this.barTop, y: want ? barH : 0,
+        duration: 420, ease: 'sine.out',
+      });
+      this.tweens.add({
+        targets: this.barBottom, y: want ? h - barH : h,
+        duration: 420, ease: 'sine.out',
+      });
+    }
+  }
+
   private innerActive = false;
+  private voiceGen = 0;
+  private voiceTexts: Phaser.GameObjects.Text[] = [];
 
   /** True while any modal UI is up — movement and interactions pause. */
   get busy(): boolean {
+    if (!this.dialogue) return false; // queried before create() — nothing is up
     return this.dialogue.open || !!this.notebookPanel || !!this.helpPanel || this.innerActive;
   }
 
   /** His voice, over black, between the scenes. One line at a time;
-   *  E / Space / tap moves on. */
+   *  E / Space / tap moves on. A newer voice always silences an older one —
+   *  scene transitions can never stack two monologues. */
   async innerVoice(lines: ReadonlyArray<string>): Promise<void> {
     if (!lines.length) return;
+    const g = ++this.voiceGen;
+    for (const o of this.voiceTexts) o.destroy();
+    this.voiceTexts = [];
     this.innerActive = true;
     for (const line of lines) {
+      if (g !== this.voiceGen) return; // superseded by a newer scene's voice
       const t = this.add.text(this.scale.width / 2, this.scale.height / 2, line, {
-        fontFamily: 'monospace', fontSize: '19px', fontStyle: 'italic',
+        fontFamily: 'GameFont, monospace', fontSize: '26px', fontStyle: 'italic',
         color: '#b9c2d0', align: 'center',
         wordWrap: { width: Math.min(this.scale.width - 120, 720) },
         lineSpacing: 8,
       }).setOrigin(0.5).setDepth(2050).setAlpha(0);
       const hint = this.add.text(this.scale.width / 2, this.scale.height / 2 + 60, '▾', {
-        fontFamily: 'monospace', fontSize: '13px', color: '#3e4658',
+        fontFamily: 'GameFont, monospace', fontSize: '17px', color: '#3e4658',
       }).setOrigin(0.5).setDepth(2050).setAlpha(0);
+      this.voiceTexts = [t, hint];
       await new Promise<void>((res) => {
         this.tweens.add({ targets: t, alpha: 1, duration: 550, onComplete: () => res() });
       });
       this.tweens.add({ targets: hint, alpha: 0.8, duration: 400, delay: 500 });
       await this.waitAdvance();
+      if (g !== this.voiceGen) return; // superseded while waiting
       await new Promise<void>((res) => {
         this.tweens.add({
           targets: [t, hint], alpha: 0, duration: 280,
@@ -98,7 +143,10 @@ export class UiScene extends Phaser.Scene {
         });
       });
     }
-    this.innerActive = false;
+    if (g === this.voiceGen) {
+      this.innerActive = false;
+      this.voiceTexts = [];
+    }
   }
 
   private waitAdvance(): Promise<void> {
@@ -153,6 +201,15 @@ export class UiScene extends Phaser.Scene {
     this.fadeRect.setAlpha(1);
   }
 
+  /** Scene transitions call this: any open/queued dialogue dies here. */
+  resetDialogue(): void {
+    this.dialogue?.reset();
+    this.voiceGen++;
+    for (const o of this.voiceTexts) o.destroy();
+    this.voiceTexts = [];
+    this.innerActive = false;
+  }
+
   async fadeOut(ms = 600): Promise<void> {
     await new Promise<void>((res) => {
       this.tweens.add({ targets: this.fadeRect, alpha: 1, duration: ms, onComplete: () => res() });
@@ -171,8 +228,8 @@ export class UiScene extends Phaser.Scene {
   async timeCard(text: string, holdMs = 1600, stayBlack = false): Promise<void> {
     await this.fadeOut(500);
     const card = this.add.text(this.scale.width / 2, this.scale.height / 2, text, {
-      fontFamily: 'monospace',
-      fontSize: text.length > 14 ? '24px' : '36px',
+      fontFamily: 'GameFont, monospace',
+      fontSize: text.length > 14 ? '30px' : '46px',
       color: '#c8d0dc',
       align: 'center',
       wordWrap: { width: this.scale.width - 140 },
@@ -209,14 +266,14 @@ export class UiScene extends Phaser.Scene {
     bg.setStrokeStyle(1, 0x39445a);
     const accent = this.add.rectangle(0, 0, 3, h, 0xe4c878, 0.9).setOrigin(0);
     const title = this.add.text(18, 14, 'NOTEBOOK — what they told you', {
-      fontFamily: 'monospace', fontSize: '12px', color: '#8fa3bf',
+      fontFamily: 'GameFont, monospace', fontSize: '16px', color: '#8fa3bf',
     });
     const body = this.add.text(18, 42, lines, {
-      fontFamily: 'monospace', fontSize: '14px', color: '#c8cfc2',
+      fontFamily: 'GameFont, monospace', fontSize: '19px', color: '#c8cfc2',
       wordWrap: { width: w - 36 }, lineSpacing: 4,
     });
     const closeHint = this.add.text(w - 14, h - 10, 'N to close', {
-      fontFamily: 'monospace', fontSize: '11px', color: '#4a5468',
+      fontFamily: 'GameFont, monospace', fontSize: '15px', color: '#4a5468',
     }).setOrigin(1);
     this.notebookPanel = this.add
       .container(this.scale.width - w - 28, 44, [bg, accent, title, body, closeHint])
@@ -243,7 +300,7 @@ export class UiScene extends Phaser.Scene {
     ];
     const body = lines.map(([k, v]) => `${k.padEnd(14)} ${v}`).join('\n\n');
     const bodyText = this.add.text(18, 46, body, {
-      fontFamily: 'monospace', fontSize: '13px', color: '#c8d0dc',
+      fontFamily: 'GameFont, monospace', fontSize: '18px', color: '#c8d0dc',
       wordWrap: { width: w - 36 }, lineSpacing: 4,
     });
     const h = bodyText.height + 76;
@@ -251,7 +308,7 @@ export class UiScene extends Phaser.Scene {
       .setStrokeStyle(1, 0x39445a);
     const accent = this.add.rectangle(0, 0, 3, h, 0x8fa3bf, 0.9).setOrigin(0);
     const title = this.add.text(18, 14, 'HOW TO PLAY', {
-      fontFamily: 'monospace', fontSize: '12px', color: '#8fa3bf',
+      fontFamily: 'GameFont, monospace', fontSize: '16px', color: '#8fa3bf',
     });
     this.helpPanel = this.add
       .container((this.scale.width - w) / 2, (this.scale.height - h) / 2, [bg, accent, title, bodyText])

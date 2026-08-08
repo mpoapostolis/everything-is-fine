@@ -57,6 +57,8 @@ export class WatersScene extends StoryScene {
         await this.play([
           { say: { speaker: 'Wife', text: S.wifeFreeze } },
           { say: { speaker: 'Wife', text: S.wifeWaters } },
+          // the floor drops out from under the day
+          { call: () => this.cameras.main.shake(380, 0.0045) },
           { say: { speaker: 'You', text: S.youOkay } },
           // the call — two rings, then his voice
           { call: () => {

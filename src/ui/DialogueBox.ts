@@ -27,14 +27,14 @@ export class DialogueBox {
     this.speakerChip = scene.add.rectangle(14, -12, 10, 24, 0x1a2030, 1)
       .setOrigin(0).setStrokeStyle(1, 0x39445a).setVisible(false);
     this.speakerObj = scene.add.text(24, -6, '', {
-      fontFamily: 'monospace', fontSize: '13px', color: '#a8bcd8',
+      fontFamily: 'GameFont, monospace', fontSize: '18px', color: '#a8bcd8',
     });
     this.textObj = scene.add.text(26, 20, '', {
-      fontFamily: 'monospace', fontSize: '17px', color: '#e8e6df',
+      fontFamily: 'GameFont, monospace', fontSize: '24px', color: '#e8e6df',
       lineSpacing: 7,
     });
     this.hint = scene.add.text(0, 0, '▾ E', {
-      fontFamily: 'monospace', fontSize: '13px', color: '#5a6478',
+      fontFamily: 'GameFont, monospace', fontSize: '18px', color: '#5a6478',
     }).setOrigin(1).setVisible(false);
     this.root = scene.add.container(0, 0, [
       this.bg, this.accent, this.speakerChip, this.speakerObj, this.textObj, this.hint,
@@ -63,9 +63,12 @@ export class DialogueBox {
    *  sequences can never orphan each other's promise (which used to freeze
    *  the whole interaction system). */
   private chain: Promise<void> = Promise.resolve();
+  private gen = 0;
 
   say(speaker: string | undefined, text: string): Promise<void> {
-    const run = () => this.doSay(speaker, text);
+    const g = this.gen;
+    // lines queued before a reset() belong to a dead scene — they no-op
+    const run = () => (g === this.gen ? this.doSay(speaker, text) : Promise.resolve());
     this.chain = this.chain.then(run, run);
     return this.chain;
   }
@@ -100,6 +103,18 @@ export class DialogueBox {
     return new Promise((res) => {
       this.resolve = res;
     });
+  }
+
+  /** Kill whatever is open or queued — used on scene transitions so a
+   *  half-finished conversation can never wedge the next scene. */
+  reset(): void {
+    this.gen++;
+    this.timer?.remove();
+    this.root.setVisible(false);
+    const r = this.resolve;
+    this.resolve = undefined;
+    this.chain = Promise.resolve();
+    r?.();
   }
 
   advance(): void {

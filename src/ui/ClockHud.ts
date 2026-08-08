@@ -18,11 +18,11 @@ export class ClockHud {
     this.accent = scene.add.rectangle(0, 12, 3, 58, 0x8fa3bf, 1)
       .setOrigin(1, 0).setDepth(999).setVisible(false);
     this.dayText = scene.add.text(0, 19, '', {
-      fontFamily: 'monospace', fontSize: '11px', color: '#6a7488',
+      fontFamily: 'GameFont, monospace', fontSize: '15px', color: '#6a7488',
       letterSpacing: 3,
     }).setOrigin(1, 0).setDepth(1000).setVisible(false);
     this.timeText = scene.add.text(0, 33, '', {
-      fontFamily: 'monospace', fontSize: '27px', color: '#dce6f4',
+      fontFamily: 'GameFont, monospace', fontSize: '36px', color: '#dce6f4',
       stroke: '#0a0e16', strokeThickness: 3,
     }).setOrigin(1, 0).setDepth(1000).setVisible(false);
     this.layout();

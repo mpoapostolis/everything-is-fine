@@ -35,7 +35,7 @@ export class SignatureScene extends StoryScene {
     this.room.prop(160, 130, 'prop/desk-papers');
     this.room.person(215, 128, 'doctor/idle-down');
     this.scrawl = this.add.text(160, 96, '', {
-      fontFamily: 'monospace', fontSize: '10px', color: '#2a2f3a',
+      fontFamily: 'GameFont, monospace', fontSize: '10px', color: '#2a2f3a',
       backgroundColor: '#e8e6dfee', padding: { x: 6, y: 3 },
     }).setOrigin(0.5, 1).setDepth(800).setVisible(false);
 
@@ -59,6 +59,9 @@ export class SignatureScene extends StoryScene {
         this.player.lock();
         this.scrawl.setVisible(true).setText(' ');
         audio.setMusic(null); // every sound drops away except the pen
+        // the world narrows to a sheet of paper
+        const cam = this.cameras.main;
+        this.tweens.add({ targets: cam, zoom: cam.zoom * 1.15, duration: 5_500, ease: 'sine.in' });
         this.signing = true;
       },
     });

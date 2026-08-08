@@ -14,10 +14,10 @@ export class BootScene extends Phaser.Scene {
     const cy = this.scale.height / 2;
 
     this.add.text(cx, cy - 90, 'EVERYTHING IS FINE', {
-      fontFamily: 'monospace', fontSize: '34px', color: '#e8e6df',
+      fontFamily: 'GameFont, monospace', fontSize: '52px', color: '#e8e6df',
     }).setOrigin(0.5);
     this.add.text(cx, cy - 52, 'a true story', {
-      fontFamily: 'monospace', fontSize: '14px', color: '#5a6478',
+      fontFamily: 'GameFont, monospace', fontSize: '20px', color: '#5a6478',
     }).setOrigin(0.5);
 
     const barW = 320;
@@ -25,7 +25,7 @@ export class BootScene extends Phaser.Scene {
       .setStrokeStyle(1, 0x3a4356);
     const fill = this.add.rectangle(cx - barW / 2, cy + 10, 1, 8, 0x8fa3bf).setOrigin(0, 0.5);
     const pct = this.add.text(cx, cy + 34, '0%', {
-      fontFamily: 'monospace', fontSize: '12px', color: '#5a6478',
+      fontFamily: 'GameFont, monospace', fontSize: '17px', color: '#5a6478',
     }).setOrigin(0.5);
 
     this.load.on('progress', (p: number) => {
@@ -47,13 +47,13 @@ export class BootScene extends Phaser.Scene {
     const cy = this.scale.height / 2;
 
     const begin = this.add.text(cx, cy + 90, '— press any key to begin —', {
-      fontFamily: 'monospace', fontSize: '16px', color: '#c8d0dc',
+      fontFamily: 'GameFont, monospace', fontSize: '24px', color: '#c8d0dc',
     }).setOrigin(0.5);
     this.tweens.add({ targets: begin, alpha: 0.25, duration: 900, yoyo: true, repeat: -1 });
 
     this.add.text(cx, this.scale.height - 28,
       'arrows / WASD — walk      E — interact      N — notebook      H — help      F — fullscreen', {
-        fontFamily: 'monospace', fontSize: '12px', color: '#5a6478',
+        fontFamily: 'GameFont, monospace', fontSize: '17px', color: '#5a6478',
       }).setOrigin(0.5);
 
     const start = () => {

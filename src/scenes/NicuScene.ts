@@ -22,6 +22,7 @@ export class NicuScene extends StoryScene {
 
     this.room.wallDecal(70, 40, 'sign/icu');
     this.room.lightPool(180, 150, 200, 90, 0xffdca8, 0.1);
+    this.room.motes(180, 150, 170, 80, 0xffe0b0, 12); // the warm air is alive
     this.room.prop(180, 150, 'prop/incubator-cart');
     this.room.prop(70, 140, 'prop/monitor-cart');
     this.room.prop(290, 135, 'prop/drawer-cart');

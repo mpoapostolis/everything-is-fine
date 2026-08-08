@@ -82,6 +82,27 @@ export class RoomBuilder {
       .setBlendMode(Phaser.BlendModes.SCREEN);
   }
 
+  /** Dust motes drifting in a shaft of light. Life, cheaply. */
+  motes(x: number, y: number, w: number, h: number, color = 0xffe8c0, count = 9): void {
+    for (let i = 0; i < count; i++) {
+      const dot = this.scene.add.circle(
+        x - w / 2 + Math.random() * w,
+        y - h / 2 + Math.random() * h,
+        0.8 + Math.random() * 1.2,
+        color, 0.22,
+      ).setDepth(-4).setBlendMode(Phaser.BlendModes.ADD);
+      this.scene.tweens.add({
+        targets: dot,
+        x: dot.x + (Math.random() * 36 - 18),
+        y: dot.y + (Math.random() * 22 - 11),
+        alpha: { from: 0.05, to: 0.28 },
+        duration: 3200 + Math.random() * 4200,
+        yoyo: true, repeat: -1, ease: 'sine.inout',
+        delay: Math.random() * 2500,
+      });
+    }
+  }
+
   /** A person who stands somewhere: sprite + grounding shadow. */
   person(x: number, y: number, key: string): Phaser.GameObjects.Image {
     this.scene.add.ellipse(x, y - 1, 22, 7, 0x000000, 0.18).setDepth(y - 1);

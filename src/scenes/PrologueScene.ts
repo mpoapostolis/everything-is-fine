@@ -31,9 +31,11 @@ export class PrologueScene extends StoryScene {
     this.room.wallDecal(400, 40, 'home/window');
     this.room.wallDecal(320, 42, 'prop/wall-art');
     this.room.wallDecal(170, 38, 'prop/wall-clock-b');
-    // morning light through the windows
+    // morning light through the windows — with dust drifting in it
     this.room.lightPool(230, 110, 130, 60, 0xffe9c0, 0.1);
     this.room.lightPool(400, 110, 130, 60, 0xffe9c0, 0.1);
+    this.room.motes(230, 115, 120, 60);
+    this.room.motes(400, 115, 120, 60);
     this.add.image(66, 92, 'home/rug').setDepth(-9).setScale(0.5); // doormat
 
     // kitchen right
