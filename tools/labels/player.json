@@ -1,0 +1,28 @@
+{
+  "src": "build/crops/player",
+  "default_scale": 0.25,
+  "items": {
+    "crop_000": "player/idle-down",
+    "crop_001": "player/idle-up",
+    "crop_005": "player/idle-right",
+    "crop_008": "player/walk-up-a",
+    "crop_009": "player/walk-up-b",
+    "crop_010": "player/walk-right-a",
+    "crop_011": "player/walk-right-b",
+    "crop_012": "player/walk-down-a",
+    "crop_014": "player/walk-down-b",
+    "crop_017": "player/run-right",
+    "crop_018": "player/phone",
+    "crop_019": "player/stand-sad",
+    "crop_020": "player/head-in-hands",
+    "crop_021": "prop/waiting-chair-single",
+    "crop_022": "player/sit-slumped",
+    "crop_023": "player/reach"
+  },
+  "flips": {
+    "player/idle-left": "player/idle-right",
+    "player/walk-left-a": "player/walk-right-a",
+    "player/walk-left-b": "player/walk-right-b",
+    "player/run-left": "player/run-right"
+  }
+}

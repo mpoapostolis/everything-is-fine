@@ -1,0 +1,36 @@
+{
+  "src": "build/crops/hospital-props",
+  "default_scale": 0.25,
+  "scales": {
+    "crop_000": 0.3,
+    "crop_001": 0.3,
+    "crop_002": 0.3,
+    "crop_003": 0.3
+  },
+  "items": {
+    "crop_000": "sign/icu",
+    "crop_001": "sign/ward-a",
+    "crop_002": "sign/access-denied",
+    "crop_003": "sign/wait-here",
+    "crop_004": "prop/incubator-cart",
+    "crop_005": "prop/monitor-ecg",
+    "crop_015": "prop/stool",
+    "crop_016": "prop/monitor-cart",
+    "crop_017": "prop/hospital-bed",
+    "crop_020": "prop/door-double-wood",
+    "crop_023": "prop/desk-papers",
+    "crop_025": "prop/drawer-cart",
+    "crop_028": "prop/phone-desk",
+    "crop_029": "prop/tissues",
+    "crop_030": "prop/water-bottle",
+    "crop_034": "prop/vending",
+    "crop_040": "prop/wall-clock",
+    "crop_041": "prop/wet-floor",
+    "crop_045": "prop/med-bottles",
+    "crop_046": "prop/bassinet-big",
+    "crop_051": "prop/pills-jar",
+    "crop_052": "prop/pills-jar-b",
+    "crop_057": "prop/wheelchair",
+    "crop_058": "prop/stool-b"
+  }
+}

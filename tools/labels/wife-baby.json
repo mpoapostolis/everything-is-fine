@@ -1,0 +1,29 @@
+{
+  "src": "build/crops/wife-baby",
+  "default_scale": 0.25,
+  "items": {
+    "crop_010": "wife/idle-down",
+    "crop_008": "wife/idle-up",
+    "crop_007": "wife/idle-up-b",
+    "crop_005": "wife/idle-right",
+    "crop_004": "wife/walk-down-a",
+    "crop_006": "wife/walk-down-b",
+    "crop_013": "wife/walk-right-a",
+    "crop_012": "wife/idle-down-b",
+    "crop_014": "wife/arms-crossed",
+    "crop_018": "wife/idle-down-c",
+    "crop_019": "wife/pain-lean",
+    "crop_015": "wife/in-bed",
+    "crop_016": "wife/chair-iv",
+    "crop_017": "wife/wheelchair-baby",
+    "crop_020": "baby/cot",
+    "crop_021": "baby/incubator",
+    "crop_022": "baby/bassinet"
+  },
+  "flips": {
+    "wife/idle-left": "wife/idle-right",
+    "wife/walk-left-a": "wife/walk-right-a",
+    "wife/walk-left-b": "wife/idle-right",
+    "wife/walk-right-b": "wife/idle-right"
+  }
+}

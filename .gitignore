@@ -1,0 +1,15 @@
+# deps & builds
+node_modules/
+dist/
+
+# tooling virtualenv + regenerable intermediates
+tools/.venv/
+build/
+
+# extracted archives (the .zips are the source)
+assets-raw/audio/sfx100/
+assets-raw/audio/loops/
+
+# os noise
+.DS_Store
+*.log

@@ -1,0 +1,27 @@
+{
+  "src": "build/crops/staff",
+  "default_scale": 0.25,
+  "items": {
+    "crop_000": "doctor/idle-down",
+    "crop_001": "doctor/idle-clipboard",
+    "crop_002": "doctor/idle-up",
+    "crop_004": "doctor/idle-right",
+    "crop_005": "nicu-nurse/idle-down",
+    "crop_006": "nicu-nurse/idle-up",
+    "crop_007": "nicu-nurse/idle-right",
+    "crop_008": "nurse/idle-down",
+    "crop_009": "nurse2/idle-down",
+    "crop_010": "nurse/idle-up",
+    "crop_012": "nurse/point",
+    "crop_014": "nurse/idle-right",
+    "crop_016": "receptionist/desk-a",
+    "crop_017": "receptionist/desk-b",
+    "crop_018": "receptionist/desk-c",
+    "crop_021": "security/idle-down"
+  },
+  "flips": {
+    "doctor/idle-left": "doctor/idle-right",
+    "nurse/idle-left": "nurse/idle-right",
+    "nicu-nurse/idle-left": "nicu-nurse/idle-right"
+  }
+}
