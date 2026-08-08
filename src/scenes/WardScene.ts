@@ -64,6 +64,10 @@ export class WardScene extends StoryScene {
           { say: { speaker: 'Wife', text: S.wifeDontRemember } },
           { say: { speaker: 'You', text: S.youYoureHere } },
           { say: { text: S.firstTouch } },
+          // thirty-four hours after Monday breakfast — she eats
+          { say: { text: S.tray } },
+          { say: { text: S.wifeEats } },
+          { note: { time: '18:20', text: S.noteAte } },
           { say: { speaker: 'Wife', text: S.wifeAsk } },
           { say: { speaker: 'You', text: S.youTell } },
           { say: { text: S.asleep } },

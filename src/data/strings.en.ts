@@ -77,13 +77,16 @@ export const EN = {
     docEarly: "It's still early — on another day I'd send you home to wait.",
     docStay: "But with the waters broken, she stays. If labour doesn't start on its own, we'll help it along.",
     docEarlier: "And there's a chance they'd been leaking before today. We'll keep an eye on the baby for infection.",
+    nurseNoFood: 'Nothing to eat from now on — in case we need to take her into theatre. Sips of water only.',
+    noteNoFood: 'no food allowed. "In case." Last ate: Monday breakfast.',
+    noteStillHungry: "still nothing to eat. It's almost Tuesday.",
     youWorried: 'Should we be worried?',
     doctor3: 'No. This is standard. Long — but standard.',
     note1943: '"May have been leaking before today." Before? When? No answer.',
     objBeThere: 'Be there.',
     water: [
       'You hold the cup. She drinks in small sips, eyes closed.',
-      'The nurse nods — she is allowed a little water. Nothing else. She has not eaten since yesterday.',
+      'The nurse nods — she is allowed a little water. Nothing else. Her last meal was breakfast, Monday. Another life ago.',
     ],
     hand: [
       '(You hold on until it passes. She squeezes hard enough to hurt. Good.)',
@@ -209,7 +212,7 @@ export const EN = {
     canISee: 'Can I see her?',
     notYet: 'Not yet.',
     noteNotYet: 'signed for her blood. "Not yet."',
-    twoHours: '18:00',
+    twoHours: 'TUESDAY — 18:00',
   },
   ward: {
     thoughts: [
@@ -229,6 +232,9 @@ export const EN = {
     wifeDontRemember: "…I don't remember all of it. They kept telling me it's fine.",
     youYoureHere: "You're here. That's the whole thing. You're here.",
     firstTouch: '(You take her hand. First touch since the door closed on you. She squeezes — barely, but she squeezes.)',
+    tray: '(A nurse sets down a tray: soup, bread, jelly. Her first food since Monday morning. Thirty-four hours.)',
+    wifeEats: '(She manages half the soup, slowly. It is the best thing you have ever watched anyone do.)',
+    noteAte: 'she ate. First time since Monday breakfast.',
     wifeAsk: 'Did you see the baby? …Tell me. The truth.',
     youTell: 'Small. Beautiful. Full of wires. Doing well.',
     asleep: '(She falls asleep in the middle of your fourth word. You do not move your hand.)',

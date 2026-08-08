@@ -227,7 +227,7 @@ export class CorridorScene extends StoryScene {
     ]);
     doctor.destroy();
     this.allowUnlock = true;
-    await this.ui.timeCard('11:35', 1400, true); // stay black into the rebuild
+    await this.ui.timeCard('TUESDAY — 11:35', 1400, true); // stay black into the rebuild
     this.scene.restart({ phase: 1 });
   }
 

@@ -59,6 +59,8 @@ export class DeliveryScene extends StoryScene {
         { say: { speaker: 'Doctor', text: S.docEarly } },
         { say: { speaker: 'Doctor', text: S.docStay } },
         { say: { speaker: 'Doctor', text: S.docEarlier } },
+        { say: { speaker: 'Nurse', text: S.nurseNoFood } },
+        { note: { time: '13:25', text: S.noteNoFood } },
         { say: { speaker: 'You', text: S.youWorried } },
         { say: { speaker: 'Doctor', text: S.doctor3 } },
         { note: { time: '13:20', text: S.note1943 } },
@@ -115,19 +117,23 @@ export class DeliveryScene extends StoryScene {
     this.acts++;
     if (this.acts === 3 && this.phase === 0) {
       this.phase = 1;
-      await this.ui.timeCard('19:10');
+      await this.ui.timeCard('MONDAY — 19:10');
       this.ui.setAmbience(0x9aa0b4, 0.34);
       await this.playFree([{ clock: 'MON 19:10' }, { say: { speaker: 'Wife', text: S.wifeHand } }]);
     } else if (this.acts === 5 && this.phase === 1) {
       this.phase = 2;
-      await this.ui.timeCard('23:52');
+      await this.ui.timeCard('MONDAY — 23:52');
       this.ui.setAmbience(0x7e849c, 0.42);
       audio.setMusic('music/delivery', 0.08); // the music thins out —
       audio.startBeep(0.16); // — the beep is most of what's left of the world
-      await this.playFree([{ clock: 'MON 23:52' }, { say: { text: S.wifeQuiet } }]);
+      await this.playFree([
+        { clock: 'MON 23:52' },
+        { say: { text: S.wifeQuiet } },
+        { note: { time: '23:52', text: S.noteStillHungry } },
+      ]);
     } else if (this.acts === 7 && this.phase === 2) {
       this.phase = 3;
-      await this.ui.timeCard('03:10');
+      await this.ui.timeCard('TUESDAY — 03:10');
       await this.playFree([{ clock: 'TUE 03:10' }]);
       await this.caesareanScare();
     }
@@ -148,7 +154,7 @@ export class DeliveryScene extends StoryScene {
       { say: { speaker: 'Doctor', text: S.csWait } },
       { note: { time: '05:50', text: '"Give it an hour."' } },
     ]);
-    await this.ui.timeCard('06:50', 1800); // the longest hour of the night
+    await this.ui.timeCard('TUESDAY — 06:50', 1800); // the longest hour of the night
     await this.playFree([
       { clock: 'TUE 06:50' },
       { say: { speaker: 'Doctor', text: S.csDown } },
@@ -156,7 +162,7 @@ export class DeliveryScene extends StoryScene {
     doctor.destroy();
     this.tweens.killTweensOf(cam);
     this.tweens.add({ targets: cam, zoom: cam.zoom / 1.09, duration: 1800, ease: 'sine.out' }); // breathe out
-    await this.ui.timeCard('07:00', 900);
+    await this.ui.timeCard('TUESDAY — 07:00', 900);
     this.ui.setAmbience(0xa8a49a, 0.3);
     await this.playFree([{ clock: 'TUE 07:00' }]);
     await this.birth();
@@ -182,7 +188,7 @@ export class DeliveryScene extends StoryScene {
 
     this.cameras.main.shake(700, 0.005); // the room becomes weather
     await this.playFree([{ say: { text: S.birthCrowd } }, { wait: 600 }]);
-    await this.ui.timeCard('10:02', 1400, true); // three hours of pushing, compressed
+    await this.ui.timeCard('TUESDAY — 10:02', 1400, true); // three hours of pushing, compressed
     audio.allStop(); // every other sound drops out. exactly as written.
     await this.ui.timeCard(S.babyCry, 2200); // then the world comes back — with her in it
     await this.playFree([
