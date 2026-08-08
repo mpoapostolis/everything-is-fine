@@ -16,7 +16,7 @@ You cannot fight. You can hold her hand, ask questions, and wait.
 
 Monday was supposed to be a routine check-up.
 
-**EVERYTHING IS FINE** is a short, story-rich pixel-art game based on the day my daughter was born — and the hours in which my wife almost died while everyone kept saying that everything was fine.
+**EVERYTHING IS FINE** is a short, story-rich pixel-art game based on the day my daughter was born — and the long, uncertain hours that followed, while everyone kept saying that everything was fine.
 
 You cannot fight. You cannot fix the hospital. You can hold her hand, bring water, ask questions, keep notes, call a phone that does not answer, and wait outside closed doors.
 
@@ -61,4 +61,3 @@ Generative AI was used as part of production for graphics, sound, text/dialogue 
 ### Version
 
 Browser release — v0.1.0
-
