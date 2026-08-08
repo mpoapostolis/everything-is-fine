@@ -580,7 +580,7 @@ but this one you chose, and this one you understand completely.
 
 ---
 
-## CHAPTER 15 — THE FOURTH DAY
+## CHAPTER 15 — SUNDAY
 **~5 min · Daylight. The whole hospital, one last time — at human size.**
 
 The NICU. The last scrub-in. **Hold [E], 20 seconds.** *(By now the ritual is almost
