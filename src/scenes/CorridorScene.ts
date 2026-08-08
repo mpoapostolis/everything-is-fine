@@ -15,6 +15,7 @@ export class CorridorScene extends StoryScene {
   private phase = 0; // 0: fever pending · 1: oxygen+NICU · 2: blood → go home
   private exitX = 0; // >0 once the doctor says "go home" — walking onto the
   // glass doors leaves, checked here directly, independent of prompts
+  private roomWidth = 0;
 
   constructor() {
     super('Corridor');
@@ -22,11 +23,15 @@ export class CorridorScene extends StoryScene {
 
   update(time: number, delta: number): void {
     super.update(time, delta);
-    // standing at the glass doors leaves. Open dialogue does not matter —
-    // goTo clears it. Nothing can wedge this shut.
-    if (this.exitX > 0 && !this.leaving) {
+    // Phase 2: the ENTIRE right end of the corridor is the way out.
+    // Near the doors, or simply reaching the last strip — either leaves.
+    // Open dialogue does not matter; goTo clears it. Nothing wedges this.
+    if (this.phase === 2 && !this.leaving) {
       const p = this.player.sprite;
-      if (Phaser.Math.Distance.Between(p.x, p.y, this.exitX, 92) < 58) {
+      const nearDoors = this.exitX > 0
+        && Phaser.Math.Distance.Between(p.x, p.y, this.exitX, 92) < 58;
+      const atTheEnd = this.roomWidth > 0 && p.x > this.roomWidth - 85;
+      if (nearDoors || atTheEnd) {
         this.exitX = 0;
         this.setWaypoint(null);
         void this.goTo('HomeCall');
@@ -51,6 +56,7 @@ export class CorridorScene extends StoryScene {
     const floorKey = this.phase >= 2 ? 'surface/hosp-floor-dim' : 'surface/hosp-floor';
     const wallKey = this.phase >= 2 ? 'surface/hosp-wall-dim' : 'surface/hosp-wall';
     const room = this.room.interior(0, 64, width, 200, floorKey, wallKey);
+    this.roomWidth = width;
     this.cameras.main.setBounds(-40, -60, room.width + 80, room.height + 220);
 
     // her door — always at the left end. Always closed.
