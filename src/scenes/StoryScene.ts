@@ -39,18 +39,8 @@ export abstract class StoryScene extends Phaser.Scene {
   protected setupWorld(px: number, py: number): void {
     this.ui = this.scene.get('Ui') as UiScene;
     this.scene.bringToTop('Ui');
-    // checkpoint: a refresh resumes at this scene, not at Monday morning.
-    // Scenes reached via ?scene= dev-jumps never overwrite the real save.
-    if (this.registry.get('devJump')) {
-      this.registry.set('devJump', false);
-    } else {
-      try {
-        const phase = (this as unknown as { phase?: number }).phase;
-        localStorage.setItem('eif-checkpoint', JSON.stringify({ scene: this.scene.key, phase }));
-      } catch {
-        // storage unavailable (private mode) — the game still runs
-      }
-    }
+    // no checkpoints, by design: every launch begins on Monday morning.
+    // The story is meant to be lived whole.
     audio.setLayer(null); // scenes opt in to extra mood layers explicitly
     this.runner = new ScriptRunner({ state: gameState, notebook: this.ui.notebook, ui: this.ui.port });
     this.room = new RoomBuilder(this);
@@ -59,9 +49,14 @@ export abstract class StoryScene extends Phaser.Scene {
     this.interactions = new InteractionSystem(this, () => this.ui.busy);
     this.physics.add.collider(this.player.sprite, this.room.solids);
 
-    // the camera fills the whole window: zoom scales with the viewport
+    // the camera fills the whole window: zoom scales with the viewport.
+    // Portrait phones prioritize WIDTH — otherwise the view becomes a slit.
     const applyZoom = () => {
-      const z = Math.max(this.scale.width / 560, this.scale.height / 330, 2);
+      const w = this.scale.width;
+      const h = this.scale.height;
+      const z = h > w
+        ? Math.max(w / 340, h / 560, 1.7)
+        : Math.max(w / 560, h / 330, 2);
       this.cameras.main.setZoom(z);
     };
     applyZoom();

@@ -20,6 +20,13 @@ export class ObjectiveHud {
       fontFamily: 'GameFont, monospace', fontSize: '22px', color: '#e8e6df',
       wordWrap: { width: 440 },
     }).setDepth(1000).setAlpha(0);
+    this.fitWidth();
+    scene.scale.on('resize', () => this.fitWidth());
+  }
+
+  /** Phones: the chip must never collide with the clock on the right. */
+  private fitWidth(): void {
+    this.text.setWordWrapWidth(Math.min(440, this.scene.scale.width - 190));
   }
 
   set(objective: string): void {

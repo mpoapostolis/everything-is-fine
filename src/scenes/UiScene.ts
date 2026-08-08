@@ -118,7 +118,7 @@ export class UiScene extends Phaser.Scene {
     return new Promise((resolve) => {
       const w = Math.min(this.scale.width - 64, 620);
       const x = (this.scale.width - w) / 2;
-      const y = this.scale.height - 200;
+      const y = this.scale.height - 200 - (TouchControls.wanted() ? 130 : 0);
       const bg = this.add.rectangle(x, y, w, options.length * 40 + 24, 0x0d1016, 0.95)
         .setOrigin(0).setStrokeStyle(1, 0x39445a).setDepth(1100);
       const accent = this.add.rectangle(x, y, 3, options.length * 40 + 24, 0xe4c878, 0.95)

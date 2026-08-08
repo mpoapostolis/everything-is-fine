@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import { audio } from '../engine/audio';
+import { TouchControls } from './TouchControls';
 
 const TYPE_MS = 24;
 
@@ -48,7 +49,9 @@ export class DialogueBox {
     const sw = this.scene.scale.width;
     const sh = this.scene.scale.height;
     this.boxW = Math.min(sw - 64, 980);
-    this.root.setPosition((sw - this.boxW) / 2, sh - this.boxH - 26);
+    // on touch devices the box sits ABOVE the E button, never under it
+    const lift = TouchControls.wanted() ? 152 : 26;
+    this.root.setPosition((sw - this.boxW) / 2, sh - this.boxH - lift);
     this.bg.setSize(this.boxW, this.boxH);
     this.accent.setSize(3, this.boxH);
     this.textObj.setWordWrapWidth(this.boxW - 52);

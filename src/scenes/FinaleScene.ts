@@ -126,9 +126,6 @@ export class FinaleScene extends StoryScene {
   private async title(): Promise<void> {
     this.allowUnlock = false;
     this.player.lock();
-    try {
-      localStorage.removeItem('eif-checkpoint'); // the story is over; next boot starts fresh
-    } catch { /* ok */ }
     await this.ui.fadeOut(2200);
     const cx = this.scale.width / 2;
     const cy = this.scale.height / 2;
