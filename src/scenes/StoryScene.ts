@@ -37,6 +37,13 @@ export abstract class StoryScene extends Phaser.Scene {
   }
 
   protected setupWorld(px: number, py: number): void {
+    // Phaser REUSES scene instances across start()/restart() — every
+    // transient flag must reset here, or a stale `leaving` from a previous
+    // visit silently disables this scene's exits. (The corridor→NICU→corridor
+    // round trip did exactly that.)
+    this.leaving = false;
+    this.allowUnlock = true;
+    this.stuckMs = 0;
     this.ui = this.scene.get('Ui') as UiScene;
     this.scene.bringToTop('Ui');
     // no checkpoints, by design: every launch begins on Monday morning.
